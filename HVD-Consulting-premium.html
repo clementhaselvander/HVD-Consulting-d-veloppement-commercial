@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HVD Consulting — Développement Commercial au Gabon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0e1d42;
+    --navy-light: #1a2f5e;
+    --navy-dark: #080f22;
+    --gold: #b8922a;
+    --gold-light: #d4aa45;
+    --gold-pale: #f0e4c2;
+    --white: #f8f7f3;
+    --off-white: #ede9df;
+    --gray: #6b6b6b;
+    --gray-light: #e8e5de;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--white);
+    color: var(--navy);
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-24px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .anim-fadeup { animation: fadeUp 0.7s ease both; }
+  .anim-fadein { animation: fadeIn 0.8s ease both; }
+  .anim-d1 { animation-delay: 0.1s; }
+  .anim-d2 { animation-delay: 0.25s; }
+  .anim-d3 { animation-delay: 0.4s; }
+  .anim-d4 { animation-delay: 0.55s; }
+  .anim-d5 { animation-delay: 0.7s; }
+
+  /* SCROLLREVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.32s; }
+  .reveal-delay-4 { transition-delay: 0.45s; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  nav.scrolled {
+    background: #0e1d42;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 1px 0 rgba(184,146,42,0.16), 0 10px 34px rgba(0,0,0,0.20);
+    border-bottom: 1px solid rgba(184,146,42,0.16);
+  }
+  nav.transparent {
+    background: rgba(8,15,34,0.46);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 56px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; padding: 8px 0; }
+  .nav-logo img, .logo { height: 64px; width: auto; object-fit: contain; display: block; background: none; padding: 0; filter: none; }
+  .nav-links { display: flex; align-items: center; gap: 40px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    cursor: pointer;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+  .nav-cta {
+    background: var(--gold);
+    color: white !important;
+    padding: 13px 26px;
+    letter-spacing: 0.13em;
+    font-weight: 700 !important;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s !important;
+    border-bottom: none !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: white !important; transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,0.18); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: white; transition: 0.3s; }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 84px; left: 0; right: 0;
+    background: var(--navy-dark);
+    padding: 24px 40px;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 99;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: rgba(255,255,255,0.88);
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 680px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('uploads/ChatGPT Image 23 avr. 2026, 01_20_16.png');
+    background-size: cover;
+    background-position: center 40%;
+    transform: scale(1.04);
+    animation: slowZoom 14s ease-out both;
+  }
+  @keyframes slowZoom {
+    from { transform: scale(1.08); }
+    to { transform: scale(1.0); }
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(8,15,34,0.93) 0%, rgba(8,15,34,0.80) 34%, rgba(8,15,34,0.42) 64%, rgba(8,15,34,0.08) 100%),
+      linear-gradient(180deg, rgba(8,15,34,0.35) 0%, transparent 34%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+    width: 100%;
+    padding-top: 84px;
+  }
+  .hero-left { max-width: 640px; }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 32px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    opacity: 0.92;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold-light);
+  }
+  .hero-title {
+    font-size: clamp(42px, 5.8vw, 78px);
+    font-weight: 300;
+    color: white;
+    line-height: 1.07;
+    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.18);
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); font-weight: 400; }
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.85;
+    margin-bottom: 48px;
+    font-weight: 300;
+    max-width: 500px;
+    letter-spacing: 0.01em;
+  }
+  .hero-ctas { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 64px; }
+  .btn-primary {
+    background: var(--gold);
+    color: white;
+    padding: 17px 40px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: box-shadow 0.25s, transform 0.18s, background 0.2s;
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.24);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    padding: 16px 36px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.30);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.70); color: white; background: rgba(255,255,255,0.06); }
+  .hero-keypoints {
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-kp {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.68);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .hero-kp::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    flex-shrink: 0;
+    transform: rotate(45deg);
+  }
+
+  /* SECTION WRAPPERS */
+  section { padding: 96px 0; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-size: clamp(30px, 3.5vw, 48px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .section-title.light { color: white; }
+  .section-sub {
+    font-size: 16px;
+    color: var(--gray);
+    line-height: 1.7;
+    max-width: 560px;
+    font-weight: 300;
+  }
+  .section-sub.light { color: rgba(255,255,255,0.65); }
+
+  /* PROBLEMATIQUES */
+  .problems { background: var(--white); }
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .problem-card {
+    background: var(--off-white);
+    padding: 40px 32px;
+    border-top: 3px solid transparent;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .problem-card:hover { border-color: var(--gold); background: white; }
+  .problem-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--gold-pale);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .problem-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .problem-desc { font-size: 14px; color: var(--gray); line-height: 1.65; font-weight: 300; }
+
+  /* APPROCHE / MÉTHODE DARK */
+  .approche { background: var(--navy-dark); }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    margin-top: 56px;
+  }
+  .step-card {
+    background: var(--navy-dark);
+    padding: 48px 32px;
+    position: relative;
+    transition: background 0.25s;
+  }
+  .step-card:hover { background: rgba(184,146,42,0.06); }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: rgba(184,146,42,0.18);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .step-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .step-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 14px;
+  }
+  .step-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; font-weight: 300; }
+  .step-connector {
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60px;
+    background: rgba(184,146,42,0.25);
+  }
+  .approche-cta { text-align: center; margin-top: 56px; }
+
+  /* OFFRE CARDS */
+  .offre-section { background: var(--white); }
+  .offre-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .offre-card {
+    background: var(--off-white);
+    padding: 44px 32px;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    cursor: pointer;
+  }
+  .offre-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+  }
+  .offre-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .offre-icon svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .offre-card-title { font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 12px; }
+  .offre-card-desc { font-size: 14px; color: var(--gray); line-height: 1.7; font-weight: 300; margin-bottom: 20px; }
+  .offre-link {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: gap 0.2s;
+  }
+  .offre-link:hover { gap: 14px; }
+  .offre-link::after { content: '→'; }
+
+  /* CTA BAND */
+  .cta-band {
+    background: var(--navy);
+    padding: 80px 0;
+    text-align: center;
+  }
+  .cta-band h2 {
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 300;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .cta-band p { color: rgba(255,255,255,0.6); margin-bottom: 36px; font-size: 16px; font-weight: 300; }
+
+  /* PAGE HEADER */
+  .page-header {
+    background: var(--navy-dark);
+    padding: 140px 0 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .page-header-label { color: var(--gold); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; margin-bottom: 16px; font-family: 'Lato', sans-serif; }
+  .page-header h1 { font-size: clamp(36px, 5vw, 62px); color: white; font-weight: 300; line-height: 1.1; margin-bottom: 16px; }
+  .page-header p { font-size: 17px; color: rgba(255,255,255,0.6); font-weight: 300; max-width: 600px; line-height: 1.65; }
+
+  /* OFFRE PAGE */
+  .offre-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+  .offre-block-main {
+    background: var(--navy);
+    color: white;
+    padding: 64px 56px;
+  }
+  .offre-block-main h2 { font-size: 36px; font-weight: 400; color: white; margin-bottom: 20px; line-height: 1.15; }
+  .offre-block-main p { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.7; font-weight: 300; margin-bottom: 20px; }
+  .offre-block-side {
+    background: var(--off-white);
+    padding: 64px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .offre-detail-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 12px;
+  }
+  .offre-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .offre-list li {
+    font-size: 14px;
+    color: var(--navy);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .offre-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 7px;
+    width: 5px; height: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+  .formats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .format-card {
+    background: var(--off-white);
+    padding: 40px 32px;
+    border-top: 2px solid var(--gold);
+  }
+  .format-duration { font-size: 13px; color: var(--gold); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 12px; font-family: 'Lato', sans-serif; }
+  .format-title { font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 12px; }
+  .format-desc { font-size: 14px; color: var(--gray); line-height: 1.65; font-weight: 300; }
+
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .do-card { background: var(--navy); padding: 48px 40px; }
+  .dont-card { background: var(--off-white); padding: 48px 40px; }
+  .do-card h3 { color: var(--gold-light); font-size: 22px; font-weight: 400; margin-bottom: 24px; }
+  .dont-card h3 { color: var(--navy); font-size: 22px; font-weight: 400; margin-bottom: 24px; }
+  .do-list, .dont-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .do-list li { color: rgba(255,255,255,0.75); font-size: 14px; padding-left: 20px; position: relative; line-height: 1.5; font-weight: 300; }
+  .dont-list li { color: var(--gray); font-size: 14px; padding-left: 20px; position: relative; line-height: 1.5; font-weight: 300; }
+  .do-list li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); font-size: 12px; top: 1px; }
+  .dont-list li::before { content: '×'; position: absolute; left: 0; color: #999; font-size: 14px; top: 0; }
+
+  /* MÉTHODE PAGE */
+  .methode-steps { display: flex; flex-direction: column; gap: 2px; margin-top: 56px; }
+  .methode-step {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    gap: 0;
+    background: var(--off-white);
+    overflow: hidden;
+    transition: box-shadow 0.25s;
+  }
+  .methode-step:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .methode-step-num {
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--gold);
+    padding: 40px 0;
+  }
+  .methode-step-main { padding: 40px 40px; }
+  .methode-step-main h3 { font-size: 26px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
+  .methode-step-main p { font-size: 14px; color: var(--gray); line-height: 1.7; font-weight: 300; }
+  .methode-step-livrable {
+    background: white;
+    padding: 40px 40px;
+    border-left: 2px solid var(--gold-pale);
+  }
+  .livrable-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; font-family: 'Lato', sans-serif; }
+  .livrable-item { font-size: 14px; color: var(--navy); padding: 6px 0; border-bottom: 1px solid var(--gray-light); font-weight: 400; }
+
+  .livrables-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
+  .livrables-table th {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    text-align: left;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .livrables-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 14px;
+    color: var(--navy);
+  }
+  .livrables-table tr:nth-child(even) td { background: var(--off-white); }
+  .check { color: var(--gold); font-weight: 700; }
+  .dash { color: #ccc; }
+
+  /* FAQ PAGE */
+  .faq-group { margin-bottom: 56px; }
+  .faq-group-title {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gold-pale);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .faq-group-title::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+  .faq-item {
+    border-bottom: 1px solid var(--gray-light);
+    overflow: hidden;
+  }
+  .faq-question {
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 20px;
+    transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--gold); }
+  .faq-question h3 { font-size: 18px; font-weight: 500; color: inherit; line-height: 1.3; flex: 1; }
+  .faq-toggle {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: transform 0.25s, background 0.25s;
+  }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); background: var(--gold); color: white; }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .faq-item.open .faq-answer { max-height: 400px; }
+  .faq-answer p { padding: 0 0 24px 0; font-size: 15px; color: var(--gray); line-height: 1.75; font-weight: 300; }
+
+  /* CONTACT PAGE */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .contact-info {
+    background: var(--navy);
+    padding: 56px 48px;
+    color: white;
+  }
+  .contact-info h3 { font-size: 28px; font-weight: 400; color: white; margin-bottom: 12px; }
+  .contact-info p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 40px; font-weight: 300; }
+  .contact-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .contact-detail-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(184,146,42,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .contact-detail-icon svg { width: 15px; height: 15px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .contact-detail-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 700; font-family: 'Lato', sans-serif; margin-bottom: 4px; }
+  .contact-detail-value { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 300; }
+  .contact-rassurance {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+  .contact-form { background: var(--off-white); padding: 56px 48px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); font-weight: 700; font-family: 'Lato', sans-serif; margin-bottom: 8px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid var(--gray-light);
+    color: var(--navy);
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+    appearance: none;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { height: 120px; resize: none; }
+  .form-submit {
+    background: var(--gold);
+    color: white;
+    border: none;
+    padding: 15px 36px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    transition: background 0.2s;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--gold-light); }
+  .form-success {
+    text-align: center;
+    padding: 48px;
+  }
+  .form-success h3 { font-size: 28px; color: var(--navy); margin-bottom: 12px; }
+  .form-success p { color: var(--gray); font-size: 15px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy-dark);
+    padding: 56px 0 32px;
+    border-top: 1px solid rgba(184,146,42,0.15);
+  }
+  .footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand img { height: 80px; width: auto; background: none; padding: 0; margin-bottom: 20px; filter: drop-shadow(0 1px 6px rgba(0,0,0,0.3)); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.65; font-weight: 300; }
+  .footer-col h4 { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-family: 'Lato', sans-serif; font-weight: 700; margin-bottom: 20px; }
+  .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,0.55); text-decoration: none; margin-bottom: 10px; cursor: pointer; transition: color 0.2s; font-weight: 300; }
+  .footer-col a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 300; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .problems-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .offre-grid { grid-template-columns: repeat(2, 1fr); }
+    .offre-block { grid-template-columns: 1fr; }
+    .do-dont { grid-template-columns: 1fr; }
+    .methode-step { grid-template-columns: 60px 1fr; }
+    .methode-step-livrable { display: none; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    section { padding: 64px 0; }
+    .container { padding: 0 24px; }
+    .nav-inner { padding: 0 24px; height: 76px; }
+    .nav-logo img, .logo { height: 56px; }
+    .mobile-menu { top: 76px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 24px; padding-top: 84px; }
+    .problems-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .offre-grid { grid-template-columns: 1fr; }
+    .formats-grid { grid-template-columns: 1fr; }
+    .methode-step { grid-template-columns: 1fr; }
+    .methode-step-num { padding: 20px 0; font-size: 28px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .page-header { padding: 120px 0 48px; }
+    .hero-ctas { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; }
+  }
+</style>
+</head>
+<body>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ────────── SCROLL REVEAL ──────────
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  });
+}
+
+// ────────── NAV ──────────
+function Nav({ page, setPage }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const go = (p) => { setPage(p); setMobileOpen(false); window.scrollTo(0,0); };
+
+  const links = [
+    { id: 'accueil', label: 'Accueil' },
+    { id: 'offre', label: 'Offre' },
+    { id: 'methode', label: 'Méthode' },
+    { id: 'faq', label: 'FAQ' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
+  return (
+    <>
+      <nav className={scrolled || page !== 'accueil' ? 'scrolled' : 'transparent'}>
+        <div className="nav-inner">
+          <span className="nav-logo" onClick={() => go('accueil')}>
+            <img className="logo" src="logo-light.svg" alt="HVD Consulting" />
+          </span>
+          <div className="nav-links">
+            {links.map(l => (
+              <a key={l.id} className={page === l.id ? 'active' : ''} onClick={() => go(l.id)}>
+                {l.label}
+              </a>
+            ))}
+            <a className="nav-cta" onClick={() => go('contact')}>Échanger</a>
+          </div>
+          <div className="hamburger" onClick={() => setMobileOpen(!mobileOpen)}>
+            <span /><span /><span />
+          </div>
+        </div>
+      </nav>
+      <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
+        {links.map(l => <a key={l.id} onClick={() => go(l.id)}>{l.label}</a>)}
+        <a onClick={() => go('contact')} style={{color: 'var(--gold-light)'}}>→ Échanger sur ma situation</a>
+      </div>
+    </>
+  );
+}
+
+// ────────── FOOTER ──────────
+function Footer({ setPage }) {
+  const go = (p) => { setPage(p); window.scrollTo(0,0); };
+  return (
+    <footer>
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <img src="logo-light.svg" alt="HVD Consulting" />
+          <p className="footer-tagline">Développement commercial & externalisation des forces de vente au Gabon.</p>
+        </div>
+        <div className="footer-col">
+          <h4>Navigation</h4>
+          {[['accueil','Accueil'],['offre','Offre'],['methode','Méthode'],['faq','FAQ'],['contact','Contact']].map(([id,label]) => (
+            <a key={id} onClick={() => go(id)}>{label}</a>
+          ))}
+        </div>
+        <div className="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:clement@hvdconsulting.com">clement@hvdconsulting.com</a>
+          <a href="tel:+33646793016">+33 6 46 79 30 16</a>
+          <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+        </div>
+        <div className="footer-col">
+          <h4>Notre approche</h4>
+          <a onClick={() => go('offre')}>Structuration commerciale</a>
+          <a onClick={() => go('offre')}>Externalisation</a>
+          <a onClick={() => go('methode')}>Notre méthode</a>
+          <a onClick={() => go('faq')}>Questions fréquentes</a>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>© 2025 HVD Consulting — Tous droits réservés</p>
+        <p>Libreville, Gabon</p>
+      </div>
+    </footer>
+  );
+}
+
+// ────────── PAGE ACCUEIL ──────────
+function PageAccueil({ setPage }) {
+  useReveal();
+
+  const problems = [
+    { title: "Manque de structuration", desc: "Votre équipe commerciale manque de processus clairs. Chacun fait à sa façon, sans cohérence ni suivi." },
+    { title: "Prospection inefficace", desc: "Des actions de prospection dispersées, sans méthode ni ciblage. Le pipeline reste vide, les opportunités passent." },
+    { title: "Pilotage absent", desc: "Pas d'indicateurs, pas de reporting, pas de visibilité. Il est impossible de savoir ce qui fonctionne." },
+    { title: "Résultats insuffisants", desc: "Malgré les efforts, les objectifs commerciaux ne sont pas atteints. Le chiffre d'affaires plafonne." },
+  ];
+
+  const steps = [
+    { label: "Étape 01", title: "Auditer", desc: "Diagnostic terrain de votre organisation commerciale. Identification des blocages réels, pas théoriques." },
+    { label: "Étape 02", title: "Structurer", desc: "Mise en place des processus, outils et organisation pour une force de vente opérationnelle et efficace." },
+    { label: "Étape 03", title: "Mettre en œuvre", desc: "Exécution directe sur le terrain. Prospection, pilotage des équipes, ouverture de comptes." },
+    { label: "Étape 04", title: "Piloter", desc: "Suivi des indicateurs, mesure des résultats, ajustements en continu pour garantir la performance." },
+  ];
+
+  const offres = [
+    { title: "Audit terrain", desc: "Diagnostic complet de votre organisation commerciale. Identification des leviers de croissance prioritaires.", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" },
+    { title: "Structuration", desc: "Process, outils et organisation commerciale. Une force de vente qui tourne avec méthode.", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
+    { title: "Outils & KPI", desc: "Mise en place du CRM, tableau de bord, indicateurs de performance adaptés à votre réalité terrain.", icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" },
+    { title: "Externalisation", desc: "HVD Consulting devient votre direction commerciale externalisée. Résultats garantis, sans les contraintes RH.", icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
+    { title: "Accompagnement", desc: "Coaching des équipes, transfert de compétences, autonomisation progressive pour une performance durable.", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" },
+  ];
+
+  return (
+    <>
+      {/* HERO */}
+      <div className="hero">
+        <div className="hero-bg"></div>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <div className="hero-left">
+            <div className="hero-eyebrow anim-fadeup anim-d1">Gabon · Développement Commercial</div>
+            <h1 className="hero-title anim-fadeup anim-d2">
+              Votre force de vente.<br /><em>Opérationnelle.</em><br />Maintenant.
+            </h1>
+            <p className="hero-sub anim-fadeup anim-d3">
+              HVD Consulting structure et pilote votre développement commercial au Gabon — pour les PME, filiales et décideurs qui veulent des résultats concrets.
+            </p>
+            <div className="hero-ctas anim-fadeup anim-d4">
+              <span className="btn-primary" onClick={() => setPage('contact')}>Échanger sur ma situation</span>
+              <span className="btn-secondary" onClick={() => setPage('offre')}>Voir l'offre</span>
+            </div>
+            <div className="hero-keypoints anim-fadeup anim-d5">
+              <div className="hero-kp">Terrain · pas du conseil</div>
+              <div className="hero-kp">Résultats mesurables</div>
+              <div className="hero-kp">Présence locale</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* PROBLÉMATIQUES */}
+      <section className="problems">
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label">Vous reconnaissez-vous ?</div>
+            <h2 className="section-title">Ce que vivent la plupart<br />des dirigeants au Gabon</h2>
+          </div>
+          <div className="problems-grid">
+            {problems.map((p, i) => (
+              <div key={i} className={`problem-card reveal reveal-delay-${i+1}`}>
+                <div className="problem-number">0{i+1}</div>
+                <div className="problem-title">{p.title}</div>
+                <div className="problem-desc">{p.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* POSITIONNEMENT */}
+      <section style={{background:'var(--off-white)', padding:'72px 0'}}>
+        <div className="container">
+          <div className="reveal" style={{maxWidth:780,margin:'0 auto',textAlign:'center'}}>
+            <div className="section-label" style={{justifyContent:'center'}}>Notre positionnement</div>
+            <h2 className="section-title" style={{fontSize:'clamp(26px,3vw,40px)'}}>
+              "La plupart des entreprises ne manquent pas de stratégie.<br />
+              <em style={{fontStyle:'italic', color:'var(--gold)'}}>Elles manquent de quelqu'un pour l'exécuter."</em>
+            </h2>
+            <p style={{fontSize:'16px', color:'var(--gray)', lineHeight:'1.75', marginTop:'20px', fontWeight:300}}>
+              HVD Consulting n'est pas un cabinet de conseil théorique. Nous intervenons directement sur le terrain — pour structurer, mettre en œuvre et piloter votre développement commercial au Gabon.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* APPROCHE */}
+      <section className="approche">
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label" style={{color:'var(--gold)'}}>Notre approche</div>
+            <h2 className="section-title light">Une méthode en 4 étapes.<br />Structurée. Terrain. Efficace.</h2>
+          </div>
+          <div className="steps-grid">
+            {steps.map((s, i) => (
+              <div key={i} className={`step-card reveal reveal-delay-${i+1}`}>
+                <div className="step-num">0{i+1}</div>
+                <div className="step-label">{s.label}</div>
+                <div className="step-title">{s.title}</div>
+                <div className="step-desc">{s.desc}</div>
+                {i < 3 && <div className="step-connector" />}
+              </div>
+            ))}
+          </div>
+          <div className="approche-cta reveal">
+            <span className="btn-secondary" onClick={() => { setPage('methode'); window.scrollTo(0,0); }}>
+              Voir la méthode complète →
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* OFFRE APERÇU */}
+      <section className="offre-section">
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label">Ce que nous faisons</div>
+            <h2 className="section-title">Nos prestations</h2>
+            <p className="section-sub">De l'audit initial à l'externalisation complète de votre force de vente.</p>
+          </div>
+          <div className="offre-grid">
+            {offres.map((o, i) => (
+              <div key={i} className={`offre-card reveal reveal-delay-${(i%3)+1}`} onClick={() => { setPage('offre'); window.scrollTo(0,0); }}>
+                <div className="offre-icon">
+                  <svg viewBox="0 0 24 24"><path d={o.icon} /></svg>
+                </div>
+                <div className="offre-card-title">{o.title}</div>
+                <div className="offre-card-desc">{o.desc}</div>
+                <span className="offre-link">Voir le détail</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className="cta-band">
+        <div className="container">
+          <div className="reveal">
+            <h2>Prêt à structurer votre<br />développement commercial ?</h2>
+            <p>Un échange de 30 minutes suffit pour évaluer si une intervention fait sens.</p>
+            <span className="btn-primary" onClick={() => { setPage('contact'); window.scrollTo(0,0); }}>Échanger sur ma situation</span>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ────────── PAGE OFFRE ──────────
+function PageOffre({ setPage }) {
+  useReveal();
+  return (
+    <>
+      <div className="page-header">
+        <div className="container">
+          <div className="page-header-label anim-fadeup anim-d1">Notre offre</div>
+          <h1 className="anim-fadeup anim-d2">Ce que nous<br />proposons concrètement</h1>
+          <p className="anim-fadeup anim-d3">Deux types d'intervention, adaptées à votre stade de développement commercial.</p>
+        </div>
+      </div>
+
+      <section>
+        <div className="container">
+          <div className="reveal section-label">Offre 1</div>
+          <div className="offre-block reveal">
+            <div className="offre-block-main">
+              <h2>Structuration commerciale</h2>
+              <p>Vous avez une activité, une équipe, mais votre développement commercial manque de méthode. Nous intervenons pour poser les bases d'une organisation commerciale professionnelle.</p>
+              <p><strong style={{color:'var(--gold-light)'}}>Pour qui :</strong> PME en phase de structuration, filiales souhaitant professionnaliser leur force de vente locale, directions générales qui veulent reprendre le contrôle.</p>
+            </div>
+            <div className="offre-block-side">
+              <div>
+                <div className="offre-detail-label">Ce que ça inclut</div>
+                <ul className="offre-list">
+                  <li>Audit de l'organisation commerciale existante</li>
+                  <li>Définition du positionnement et des cibles prioritaires</li>
+                  <li>Mise en place des process de prospection et de suivi</li>
+                  <li>Sélection et déploiement des outils CRM</li>
+                  <li>Création des supports commerciaux (pitch, argumentaires)</li>
+                  <li>Formation et coaching de l'équipe en place</li>
+                </ul>
+              </div>
+              <div>
+                <div className="offre-detail-label">Ce que vous obtenez</div>
+                <ul className="offre-list">
+                  <li>Une organisation commerciale claire et opérationnelle</li>
+                  <li>Des process reproductibles et transmissibles</li>
+                  <li>Une équipe formée et outillée</li>
+                  <li>Des indicateurs de suivi actionnables</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div style={{marginTop:'2px'}} className="reveal section-label">Offre 2</div>
+          <div className="offre-block reveal">
+            <div className="offre-block-main">
+              <h2>Externalisation commerciale</h2>
+              <p>Vous n'avez pas le temps, les ressources ou l'expertise pour construire une force de vente en interne. HVD Consulting devient votre direction commerciale externalisée.</p>
+              <p><strong style={{color:'var(--gold-light)'}}>Pour qui :</strong> Entreprises sans directeur commercial, structures en lancement sur le marché gabonais, filiales de groupes cherchant un relais commercial local fiable.</p>
+            </div>
+            <div className="offre-block-side">
+              <div>
+                <div className="offre-detail-label">Ce que ça inclut</div>
+                <ul className="offre-list">
+                  <li>Prise en charge complète du développement commercial</li>
+                  <li>Prospection active, gestion des leads et des rendez-vous</li>
+                  <li>Pilotage des négociations et fermeture des deals</li>
+                  <li>Reporting hebdomadaire et tableaux de bord</li>
+                  <li>Représentation commerciale auprès de vos clients</li>
+                  <li>Réseau et intelligence du marché local</li>
+                </ul>
+              </div>
+              <div>
+                <div className="offre-detail-label">Ce que vous obtenez</div>
+                <ul className="offre-list">
+                  <li>Un directeur commercial opérationnel, sans les coûts RH</li>
+                  <li>Un pipeline alimenté en continu</li>
+                  <li>Une visibilité totale sur les actions et résultats</li>
+                  <li>La flexibilité d'une mission adaptée à vos besoins</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{background:'var(--off-white)'}}>
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label">Formats de mission</div>
+            <h2 className="section-title">Trois niveaux d'engagement</h2>
+            <p className="section-sub">De l'intervention courte au partenariat long terme — selon votre situation.</p>
+          </div>
+          <div className="formats-grid">
+            {[
+              { duration: '2 à 4 semaines', title: 'Mission courte', desc: 'Diagnostic approfondi, identification des priorités, plan d\'action. Idéal pour démarrer avec clarté avant de s\'engager plus loin.' },
+              { duration: '1 à 3 mois', title: 'Mission moyenne', desc: 'Structuration complète de votre organisation commerciale. Déploiement des outils, formation des équipes, mise en route.' },
+              { duration: '3 à 12 mois', title: 'Mission longue', desc: 'Externalisation et transformation commerciale. Résultats mesurables, transfert de compétences, autonomisation progressive.' },
+            ].map((f, i) => (
+              <div key={i} className={`format-card reveal reveal-delay-${i+1}`}>
+                <div className="format-duration">{f.duration}</div>
+                <div className="format-title">{f.title}</div>
+                <div className="format-desc">{f.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label">Notre positionnement</div>
+            <h2 className="section-title">Ce qu'on fait. Ce qu'on ne fait pas.</h2>
+          </div>
+          <div className="do-dont reveal">
+            <div className="do-card">
+              <h3>Ce que nous faisons</h3>
+              <ul className="do-list">
+                <li>Intervenir directement sur le terrain</li>
+                <li>Produire des livrables concrets et actionnables</li>
+                <li>Travailler sur vos objectifs de chiffre d'affaires</li>
+                <li>Piloter l'exécution, pas seulement conseiller</li>
+                <li>Adapter l'approche à la réalité du marché gabonais</li>
+                <li>Mesurer et rendre compte des résultats</li>
+              </ul>
+            </div>
+            <div className="dont-card">
+              <h3>Ce que nous ne faisons pas</h3>
+              <ul className="dont-list">
+                <li>Produire des rapports théoriques sans suite opérationnelle</li>
+                <li>Intervenir en dehors de notre périmètre d'expertise</li>
+                <li>Faire de la formation générique sans ancrage terrain</li>
+                <li>Promettre des résultats sans les conditions réunies</li>
+                <li>Travailler en silo sans lien avec vos équipes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-band">
+        <div className="container">
+          <div className="reveal">
+            <h2>Discutons de votre situation</h2>
+            <p>Un premier échange sans engagement pour définir le type d'intervention adapté.</p>
+            <span className="btn-primary" onClick={() => { setPage('contact'); window.scrollTo(0,0); }}>Échanger sur ma situation</span>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ────────── PAGE MÉTHODE ──────────
+function PageMethode({ setPage }) {
+  useReveal();
+  const steps = [
+    {
+      num: '01',
+      title: 'Diagnostic terrain',
+      duration: '1 à 2 semaines',
+      desc: 'Immersion dans votre organisation commerciale. Entretiens avec les équipes, analyse du pipeline, observation des pratiques terrain. Identification des blocages réels — pas théoriques.',
+      livrables: ['Rapport de diagnostic', 'Cartographie des forces/faiblesses', 'Plan de priorités actionnable']
+    },
+    {
+      num: '02',
+      title: 'Structuration',
+      duration: '2 à 6 semaines',
+      desc: 'Mise en place de l\'organisation commerciale : définition des rôles, des process de prospection et de suivi, sélection et déploiement des outils. Construction des supports de vente.',
+      livrables: ['Playbook commercial', 'CRM configuré', 'Supports de vente', 'Process de prospection']
+    },
+    {
+      num: '03',
+      title: 'Action terrain',
+      duration: 'En continu',
+      desc: 'Prospection active, pilotage des rdv commerciaux, gestion des négociations. Coaching direct des équipes sur le terrain. Exécution des actions définies dans la phase de structuration.',
+      livrables: ['Pipeline alimenté', 'Comptes-rendus hebdomadaires', 'Deals en cours', 'Coaching terrain']
+    },
+    {
+      num: '04',
+      title: 'Résultats & transfert',
+      duration: 'Phase finale',
+      desc: 'Mesure des résultats, analyse des indicateurs, ajustements. Transfert progressif des compétences vers vos équipes pour garantir l\'autonomie après la mission.',
+      livrables: ['Bilan de mission', 'Tableau de bord final', 'Guide d\'autonomisation', 'Plan de continuité']
+    },
+  ];
+
+  return (
+    <>
+      <div className="page-header">
+        <div className="container">
+          <div className="page-header-label anim-fadeup anim-d1">Notre méthode</div>
+          <h1 className="anim-fadeup anim-d2">Une approche structurée,<br />pas une boîte noire</h1>
+          <p className="anim-fadeup anim-d3">Ce qui distingue HVD Consulting : terrain + rigueur + résultats mesurables. Voici exactement comment nous travaillons.</p>
+        </div>
+      </div>
+
+      <section>
+        <div className="container">
+          <div className="methode-steps">
+            {steps.map((s, i) => (
+              <div key={i} className={`methode-step reveal reveal-delay-${i%2+1}`}>
+                <div className="methode-step-num">{s.num}</div>
+                <div className="methode-step-main">
+                  <div style={{fontSize:'12px', color:'var(--gold)', letterSpacing:'0.15em', textTransform:'uppercase', fontWeight:700, fontFamily:'Lato,sans-serif', marginBottom:'8px'}}>{s.duration}</div>
+                  <h3>{s.title}</h3>
+                  <p>{s.desc}</p>
+                </div>
+                <div className="methode-step-livrable">
+                  <div className="livrable-label">Livrables</div>
+                  {s.livrables.map((l, j) => <div key={j} className="livrable-item">{l}</div>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{background:'var(--off-white)'}}>
+        <div className="container">
+          <div className="reveal">
+            <div className="section-label">Ce que vous recevez</div>
+            <h2 className="section-title">Livrables par type de mission</h2>
+          </div>
+          <div className="reveal" style={{overflowX:'auto', marginTop:'40px'}}>
+            <table className="livrables-table">
+              <thead>
+                <tr>
+                  <th>Livrable</th>
+                  <th>Diagnostic</th>
+                  <th>Structuration</th>
+                  <th>Externalisation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Rapport de diagnostic', '✓', '✓', '✓'],
+                  ['Plan de priorités commerciales', '✓', '✓', '✓'],
+                  ['Playbook commercial', '—', '✓', '✓'],
+                  ['CRM configuré', '—', '✓', '✓'],
+                  ['Process de prospection', '—', '✓', '✓'],
+                  ['Supports de vente', '—', '✓', '✓'],
+                  ['Pipeline alimenté', '—', '—', '✓'],
+                  ['Reporting hebdomadaire', '—', '—', '✓'],
+                  ['Coaching terrain des équipes', '—', 'Partiel', '✓'],
+                  ['Bilan de mission', '✓', '✓', '✓'],
+                ].map(([label, d, s, e], i) => (
+                  <tr key={i}>
+                    <td style={{fontWeight:500}}>{label}</td>
+                    <td className={d === '✓' ? 'check' : 'dash'}>{d}</td>
+                    <td className={s === '✓' ? 'check' : 'dash'}>{s}</td>
+                    <td className={e === '✓' ? 'check' : 'dash'}>{e}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-band">
+        <div className="container">
+          <div className="reveal">
+            <h2>Démarrons par un diagnostic</h2>
+            <p>La première étape est toujours un échange pour comprendre votre situation.</p>
+            <span className="btn-primary" onClick={() => { setPage('contact'); window.scrollTo(0,0); }}>Prendre contact</span>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ────────── PAGE FAQ ──────────
+function PageFAQ({ setPage }) {
+  useReveal();
+  const [open, setOpen] = useState(null);
+
+  const groups = [
+    {
+      label: 'Comprendre l\'offre',
+      qs: [
+        { q: 'Quelle est la différence entre structuration et externalisation ?', a: 'La structuration, c\'est intervenir pour poser les bases de votre organisation commerciale : process, outils, formation de vos équipes. À la fin de la mission, vos équipes sont autonomes. L\'externalisation, c\'est aller plus loin : HVD Consulting prend en charge directement l\'exécution commerciale — prospection, rendez-vous, négociation — pendant une durée déterminée. Vous bénéficiez d\'un directeur commercial opérationnel sans en recruter un.' },
+        { q: 'Vous intervenez aussi pour les grandes entreprises ou uniquement les PME ?', a: 'Nous travaillons avec des PME locales, des filiales de groupes internationaux implantées au Gabon, et des structures en lancement sur le marché gabonais. La taille n\'est pas le critère — c\'est le besoin en développement commercial opérationnel qui détermine si une intervention fait sens.' },
+        { q: 'Vous faites du conseil ou de l\'opérationnel ?', a: 'De l\'opérationnel, pas du conseil théorique. Nous ne produisons pas de rapports pour l\'étagère. Nous intervenons sur le terrain, nous exécutons, nous pilotons. Les livrables sont concrets : un pipeline alimenté, des process en place, une équipe formée. Le conseil n\'est utile que s\'il débouche sur de l\'action.' },
+      ]
+    },
+    {
+      label: 'Avant de démarrer',
+      qs: [
+        { q: 'Comment se déroule un premier échange ?', a: 'Un appel ou une visioconférence de 30 minutes maximum. On échange sur votre situation actuelle, vos objectifs commerciaux, et les blocages que vous rencontrez. À l\'issue de cet échange, vous avez une idée claire si une intervention HVD Consulting fait sens — et si oui, par où commencer. Aucun engagement n\'est requis de votre part.' },
+        { q: 'Comment fixez-vous vos honoraires ?', a: 'Les honoraires sont définis au cas par cas, selon la nature de la mission, sa durée et son périmètre. Nous travaillons en forfait mission ou en rémunération mensuelle pour les missions longues. Tout est clarifié avant le démarrage, sans surprise. Nous abordons les honoraires lors du premier échange une fois que nous comprenons bien votre besoin.' },
+        { q: 'Faut-il signer un contrat long terme ?', a: 'Non. Les missions courtes (diagnostic) sont ponctuelles, sans engagement de suite. Les missions de structuration ont une durée définie à l\'avance. Seules les missions d\'externalisation impliquent un engagement de moyen terme — parce qu\'un développement commercial structuré prend du temps pour porter ses fruits. Dans tous les cas, les engagements sont clairs dès le départ.' },
+      ]
+    },
+    {
+      label: 'Sur le terrain',
+      qs: [
+        { q: 'Vous êtes physiquement présent au Gabon ?', a: 'Oui. La présence terrain au Gabon est au cœur de notre positionnement. Nous avons une connaissance directe du tissu économique local, des pratiques commerciales gabonaises et du réseau d\'acteurs clés. C\'est ce qui nous différencie d\'un cabinet conseil parisien qui interviendrait à distance.' },
+        { q: 'Combien de temps faut-il pour voir des premiers résultats ?', a: 'Les premiers résultats visibles apparaissent généralement dans les 4 à 8 semaines — sous forme d\'un pipeline alimenté, d\'un process en place ou de rendez-vous qualifiés obtenus. Les résultats commerciaux significatifs (chiffre d\'affaires généré) prennent en général 2 à 4 mois selon la complexité du cycle de vente. Nous ne promettons pas de résultats overnight : nous promettons une exécution rigoureuse et une transparence totale sur l\'avancement.' },
+        { q: 'Que se passe-t-il à la fin de la mission ?', a: 'La sortie de mission est anticipée dès le départ. Pour les missions de structuration, vos équipes sont formées pour prendre le relais. Pour les missions d\'externalisation, un transfert progressif est organisé. Vous ne repartez pas les mains vides : vous avez des process, des outils, et des compétences qui restent chez vous.' },
+      ]
+    },
+    {
+      label: 'Confiance',
+      qs: [
+        { q: 'Vous n\'avez pas encore de références locales visibles. Pourquoi vous faire confiance ?', a: 'C\'est une objection légitime. Nous avons fait le choix de la transparence plutôt que d\'inventer des références. Ce qui justifie la confiance : un parcours vérifiable (8 ans d\'armée, expérience commerciale BtoB/BtoC, mission terrain au Gabon en 2024), une méthode documentée et claire, et une approche par le diagnostic en premier — vous voyez comment nous travaillons avant de vous engager sur le long terme.' },
+        { q: 'Est-ce que vous travaillez en exclusivité pour un seul client à la fois ?', a: 'Pour les missions d\'externalisation longues, nous travaillons avec un nombre limité de clients simultanément — pour garantir la qualité et l\'implication nécessaire. Pour les missions courtes de structuration, nous pouvons mener plusieurs missions en parallèle sans que cela impacte la qualité. La disponibilité et le périmètre d\'intervention sont discutés et définis lors du premier échange.' },
+      ]
+    },
+  ];
+
+  let qIndex = 0;
+  return (
+    <>
+      <div className="page-header">
+        <div className="container">
+          <div className="page-header-label anim-fadeup anim-d1">Questions fréquentes</div>
+          <h1 className="anim-fadeup anim-d2">Vos questions,<br />nos réponses directes</h1>
+          <p className="anim-fadeup anim-d3">Les objections habituelles — traitées avec franchise, sans langue de bois.</p>
+        </div>
+      </div>
+
+      <section>
+        <div className="container" style={{maxWidth:'840px'}}>
+          {groups.map((g, gi) => (
+            <div key={gi} className="faq-group reveal">
+              <div className="faq-group-title">{g.label}</div>
+              {g.qs.map((item, qi) => {
+                const idx = qIndex++;
+                return (
+                  <div key={qi} className={`faq-item ${open === idx ? 'open' : ''}`}>
+                    <div className="faq-question" onClick={() => setOpen(open === idx ? null : idx)}>
+                      <h3>{item.q}</h3>
+                      <div className="faq-toggle">+</div>
+                    </div>
+                    <div className="faq-answer">
+                      <p>{item.a}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="cta-band">
+        <div className="container">
+          <div className="reveal">
+            <h2>Votre question n'est pas là ?</h2>
+            <p>Posez-la directement — nous répondons sous 48h.</p>
+            <span className="btn-primary" onClick={() => { setPage('contact'); window.scrollTo(0,0); }}>Prendre contact</span>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ────────── PAGE CONTACT ──────────
+function PageContact() {
+  useReveal();
+  const [form, setForm] = useState({ prenom: '', nom: '', entreprise: '', fonction: '', email: '', tel: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const e = {};
+    if (!form.prenom) e.prenom = true;
+    if (!form.nom) e.nom = true;
+    if (!form.email || !form.email.includes('@')) e.email = true;
+    return e;
+  };
+
+  const submit = (ev) => {
+    ev.preventDefault();
+    const e = validate();
+    setErrors(e);
+    if (Object.keys(e).length === 0) setSent(true);
+  };
+
+  return (
+    <>
+      <div className="page-header">
+        <div className="container">
+          <div className="page-header-label anim-fadeup anim-d1">Contact</div>
+          <h1 className="anim-fadeup anim-d2">Échangeons sur<br />votre situation</h1>
+          <p className="anim-fadeup anim-d3">Un échange de 30 minutes suffit pour évaluer si une intervention fait sens — et définir par où commencer.</p>
+        </div>
+      </div>
+
+      <section>
+        <div className="container">
+          <div className="contact-layout reveal">
+            <div className="contact-info">
+              <h3>Clément Haselvander</h3>
+              <p>Fondateur de HVD Consulting — Développement commercial & externalisation des forces de vente au Gabon.</p>
+              <div className="contact-detail">
+                <div className="contact-detail-icon">
+                  <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                  <div className="contact-detail-label">Email</div>
+                  <div className="contact-detail-value">clement@hvdconsulting.com</div>
+                </div>
+              </div>
+              <div className="contact-detail">
+                <div className="contact-detail-icon">
+                  <svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                </div>
+                <div>
+                  <div className="contact-detail-label">Téléphone / WhatsApp</div>
+                  <div className="contact-detail-value">+33 6 46 79 30 16</div>
+                </div>
+              </div>
+              <div className="contact-detail">
+                <div className="contact-detail-icon">
+                  <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <div className="contact-detail-label">Localisation</div>
+                  <div className="contact-detail-value">Libreville, Gabon</div>
+                </div>
+              </div>
+              <div className="contact-detail">
+                <div className="contact-detail-icon">
+                  <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </div>
+                <div>
+                  <div className="contact-detail-label">LinkedIn</div>
+                  <div className="contact-detail-value">Clément Haselvander</div>
+                </div>
+              </div>
+              <div className="contact-rassurance">
+                Diagnostic sans engagement. Réponse sous 48h.
+              </div>
+            </div>
+            <div className="contact-form">
+              {sent ? (
+                <div className="form-success">
+                  <div style={{fontSize:'48px', marginBottom:'20px'}}>✓</div>
+                  <h3>Message envoyé</h3>
+                  <p>Merci pour votre message. Nous reviendrons vers vous sous 48h.</p>
+                </div>
+              ) : (
+                <form onSubmit={submit}>
+                  <div style={{fontSize:'18px', fontFamily:'Cormorant Garamond, serif', fontWeight:500, color:'var(--navy)', marginBottom:'28px'}}>Votre demande</div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Prénom *</label>
+                      <input type="text" value={form.prenom} onChange={e => setForm({...form, prenom: e.target.value})} style={errors.prenom ? {borderColor:'#e05'} : {}} />
+                    </div>
+                    <div className="form-group">
+                      <label>Nom *</label>
+                      <input type="text" value={form.nom} onChange={e => setForm({...form, nom: e.target.value})} style={errors.nom ? {borderColor:'#e05'} : {}} />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Entreprise</label>
+                      <input type="text" value={form.entreprise} onChange={e => setForm({...form, entreprise: e.target.value})} />
+                    </div>
+                    <div className="form-group">
+                      <label>Fonction</label>
+                      <input type="text" value={form.fonction} onChange={e => setForm({...form, fonction: e.target.value})} />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Email *</label>
+                    <input type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} style={errors.email ? {borderColor:'#e05'} : {}} />
+                  </div>
+                  <div className="form-group">
+                    <label>Téléphone (optionnel)</label>
+                    <input type="tel" value={form.tel} onChange={e => setForm({...form, tel: e.target.value})} />
+                  </div>
+                  <div className="form-group">
+                    <label>Votre situation (optionnel)</label>
+                    <textarea value={form.message} onChange={e => setForm({...form, message: e.target.value})} placeholder="Décrivez brièvement votre contexte commercial et ce que vous cherchez à résoudre..." />
+                  </div>
+                  <button type="submit" className="form-submit">Envoyer ma demande</button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ────────── APP ──────────
+function App() {
+  const [page, setPage] = useState('accueil');
+
+  useEffect(() => { window.scrollTo(0,0); }, [page]);
+
+  const renderPage = () => {
+    switch(page) {
+      case 'accueil': return <PageAccueil setPage={setPage} />;
+      case 'offre': return <PageOffre setPage={setPage} />;
+      case 'methode': return <PageMethode setPage={setPage} />;
+      case 'faq': return <PageFAQ setPage={setPage} />;
+      case 'contact': return <PageContact setPage={setPage} />;
+      default: return <PageAccueil setPage={setPage} />;
+    }
+  };
+
+  return (
+    <>
+      <Nav page={page} setPage={setPage} />
+      <main>{renderPage()}</main>
+      <Footer setPage={setPage} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<div id="root"></div>
+</body>
+</html>
